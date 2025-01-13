@@ -48,7 +48,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 constexpr
-#include "spirv/output/blitf"
+#include "spirv/output/blitf/fsBlit.h"
 
 struct BlitRectangle::DescriptorSetTable : magma::DescriptorSetTable
 {

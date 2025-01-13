@@ -19,3 +19,6 @@ projects/qt/build
 
 *.o
 *.a
+
+magma.vcxproj
+magma.vcxproj.filters

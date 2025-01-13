@@ -34,9 +34,9 @@ FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> dev
         [&]() -> std::shared_ptr<ShaderModule>
         {
             constexpr
-            #include "spirv/output/blitv"
+            #include "spirv/output/blitv/vsBlit.h"
             constexpr
-            #include "spirv/output/blitv_nv"
+            #include "spirv/output/blitv_nv/vsBlitNV.h"
             constexpr hash_t hash = core::hashArray(vsBlit);
             constexpr hash_t hashNV = core::hashArray(vsBlitNV);
             const bool NV_fill_rectangle = device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME);

@@ -67,9 +67,9 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::unique_ptr<
         sharedLayout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
     constexpr
-    #include "spirv/output/immv"
+    #include "spirv/output/immv/vsImm.h"
     constexpr
-    #include "spirv/output/immf"
+    #include "spirv/output/immf/fsImm.h"
     constexpr hash_t vsImmHash = core::hashArray(vsImm);
     constexpr hash_t fsImmHash = core::hashArray(fsImm);
     std::shared_ptr<ShaderModule> vertexShader = std::make_shared<ShaderModule>(device, vsImm, vsImmHash, MAGMA_HOST_ALLOCATOR(allocator), false);

@@ -5,6 +5,9 @@ project "magma"
   cppdialect "C++20"
   floatingpoint "Strict"
 
+  glslc="%VULKAN_SDK%/Bin/glslangValidator"
+  GLSL_DIR= "src/auxiliary/spirv"
+  SPIRV_DIR= GLSL_DIR .. "/output"
 
   includedirs {
     "src",
@@ -24,7 +27,8 @@ project "magma"
     "src/renderpass",
     "src/shaders",
     "src/states",
-    "src/third-party",
+    "src/third-party/SPIRV-Reflect/include",
+    "src/third-party/SPIRV-Reflect/VulkanMemoryAllocator/include",
 
     "%VULKAN_SDK%/Include"
   }
@@ -34,7 +38,7 @@ project "magma"
     "src/magma.cpp",
     "src/allocator/alignedAllocator.cpp",
     "src/allocator/allocationCallbacks.cpp",
-    "src/allocator/cxxAllocator.cpp",
+    -- "src/allocator/cxxAllocator.cpp",
     "src/allocator/debugAlignedAllocator.cpp",
     "src/allocator/deviceMemoryAllocator.cpp",
     "src/auxiliary/accumulationBuffer.cpp",
@@ -199,17 +203,31 @@ project "magma"
     "src/states/rasterizationState.cpp",
     "src/states/vertexInputState.cpp",
     "src/states/vertexInputStructure.cpp",
-    "src/states/viewportState.cpp"
+    "src/states/viewportState.cpp",
+    "src/third-party/SPIRV-Reflect/spirv_reflect.c"
   }
 
   links {
-    "%VULKAN_SDK%/vulkan-1.lib"
+    "%VULKAN_SDK%/Lib/vulkan-1.lib"
   }
 
-  -- visual studio filters
+  prebuildcommands {
+    "mkdir -p src/auxiliary/spirv/output/blitf",
+    "mkdir -p src/auxiliary/spirv/output/blitv",
+    "mkdir -p src/auxiliary/spirv/output/blitv_nv",
+    "mkdir -p src/auxiliary/spirv/output/fontf",
+    "mkdir -p src/auxiliary/spirv/output/immv",
+    "mkdir -p src/auxiliary/spirv/output/immf",
+    glslc .. " -V --vn fsBlit " .. GLSL_DIR .. "/blit.frag -o " .. SPIRV_DIR .. "/blitf/fsBlit.h",
+    glslc .. " -V --vn vsBlit " .. GLSL_DIR .. "/blit.vert -o " .. SPIRV_DIR .. "/blitv/vsBlit.h",
+    glslc .. " -V -DNV --vn vsBlitNV " .. GLSL_DIR .. "/blit.vert -o " .. SPIRV_DIR .. "/blitv_nv/vsBlitNV.h",
+    glslc .. " -V --vn fsFont " .. GLSL_DIR .. "/font.frag -o " .. SPIRV_DIR .. "/fontf/fsFont.h",
+    glslc .. " -V --vn vsImm " .. GLSL_DIR .. "/imm.vert -o " .. SPIRV_DIR .. "/immv/vsImm.h",
+    glslc .. " -V --vn fsImm " .. GLSL_DIR .. "/imm.frag -o " .. SPIRV_DIR .. "/immf/fsImm.h"
+  }
+
 filter "system:windows"
   defines { "VK_USE_PLATFORM_WIN32_KHR" }      
-
 
 filter {"configurations:Debug"}
   buildoptions {"/MTd"}

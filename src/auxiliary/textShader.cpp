@@ -92,9 +92,9 @@ TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
     descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
-constexpr
-#include "spirv/output/fontf"
-    constexpr hash_t fsFontHash = core::hashArray(fsFont);
+
+#include "spirv/output/fontf/fsFont.h"
+    hash_t fsFontHash = core::hashArray(fsFont);
     constexpr bool reflect = true;
     std::shared_ptr<ShaderModule> fragmentShader = std::make_unique<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, reflect);
     const char *entryPointName = fragmentShader->getReflection()->getEntryPointName(0);
